@@ -4,7 +4,7 @@ from scapy.all import sniff, IP, TCP, UDP, ICMP
 import threading
 import time
 import os
-# Bildschirm löschen
+
 os.system('cls' if os.name == 'nt' else 'clear')
 
 # Farbcodes
@@ -29,7 +29,7 @@ auswahl = """
          3. IP-MAC Mapper (Admin)
         ╚═══                    ═══╝
 """
-# Anzeige in Rot
+
 print(RED + HACKTOOL + RESET)
 print(RED + intro + RESET)
 print(auswahl)
@@ -55,19 +55,18 @@ match auswahl1:
         
         def scan_port(ip, port):
             sock = socket.socket()
-            sock.settimeout(1.5)  # Timeout etwas erhöht für Banner-Antworten
-            try: 
+            sock.settimeout(1.5)  
                 sock.connect((ip, port))
                 
-                # --- NEU: Banner Grabbing ---
+              
                 try:
-                    # Wir versuchen, eine Identifikation vom Dienst zu erhalten
-                    banner = sock.recv(1024).decode().strip() #sock.recv(1024) liest daten vom socket max 1024 bytes, wartet auf Antwort vom Server / .decode() wandelt bytes in string um / .strip() das entfernt leerzeichen usw
+                   
+                    banner = sock.recv(1024).decode().strip() 
                     if not banner:
-                        # Falls keine Antwort kommt, versuchen wir den Standardnamen
+                       
                         banner = socket.getservbyport(port, "tcp")
                 except:
-                    # Falls der Dienst nicht sofort antwortet (z.B. HTTP)
+                   
                     try:
                         banner = socket.getservbyport(port, "tcp")
                     except:
@@ -91,7 +90,7 @@ match auswahl1:
             for t in threads:
                 t.join()
 
-        # Eingaben
+     
         ip = input("IP-Adresse: ")
         start_port = int(input("Startport: "))        
         end_port = int(input("Endport: "))  
@@ -116,7 +115,7 @@ match auswahl1:
         last_packet_time = time.time()
         IDLE_TIMEOUT = 10
 
-        # Dictionary für IP → Farbe
+        # Dictionary für IP -> Farbe
         ip_colors = {}
         colors = [
             "\033[91m",  # rot
@@ -206,7 +205,7 @@ match auswahl1:
         from scapy.all import sniff, IP, Ether
         import socket
 
-        # Speicher, um die Konsole nicht mit doppelten Meldungen zu fluten
+       
         seen_devices = set()
         def get_hostname(ip):
             try:
@@ -221,7 +220,7 @@ match auswahl1:
             if packet.haslayer(IP):
                 src_ip = packet[IP].src
                 
-                # Wir filtern auf dein lokales Netz (z.B. 192.168.), um Internet-Server zu ignorieren
+
                 if src_ip.startswith("192.168.") and src_ip not in seen_devices:
                     
                     # BSSID/MAC extrahieren
@@ -241,7 +240,7 @@ match auswahl1:
         print("Suche im Netzwerk nach Geräten, Namen und BSSIDs...")
         print("(Stelle sicher, dass du das Programm als Administrator gestartet hast)")
 
-        # Sniffe ohne Limit (store=0 spart Arbeitsspeicher)
+      
         sniff(prn=process_packet, store=0)
 
     case _: 
